@@ -10,7 +10,6 @@ data_bits=$(bashio::config data_bits)
 parity=$(bashio::config parity)
 stop_bits=$(bashio::config stop_bits)
 flow_control=$(bashio::config flow_control)
-no_break=$(bashio::config no_break)
 max_connections=$(bashio::config max_connections 1)
 
 # Build serial parameters
