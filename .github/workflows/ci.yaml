@@ -15,4 +15,9 @@ workflow_dispatch:
 
 jobs:
 workflows:
+permissions:
+contents: read
+packages: write
+attestations: write
+id-token: write
 uses: jhollowe-addons/workflows/.github/workflows/addon-ci.yaml@main
