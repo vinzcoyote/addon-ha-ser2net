@@ -1,16 +1,32 @@
 ---
+
 name: CI
 
-# yamllint disable-line rule:truthy
 on:
-  push:
-  pull_request:
-    types:
-      - opened
-      - reopened
-      - synchronize
-  workflow_dispatch:
+push:
+pull_request:
+types:
+- opened
+- reopened
+- synchronize
+workflow_dispatch:
 
 jobs:
-  workflows:
-    uses: jhollowe-addons/workflows/.github/workflows/addon-ci.yaml@main
+shellcheck-diagnostic:
+name: ShellCheck diagnostic
+runs-on: ubuntu-latest
+steps:
+- name: Checkout
+uses: actions/checkout@v4
+
+```
+  - name: Run ShellCheck
+    run: |
+      sudo apt-get update
+      sudo apt-get install -y shellcheck
+      find . -type f -name '*.sh' -print0 | xargs -0 -r shellcheck -s bash -f gcc
+```
+
+workflows:
+uses: jhollowe-addons/workflows/.github/workflows/addon-ci.yaml@main
+
