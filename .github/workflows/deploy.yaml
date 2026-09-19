@@ -25,6 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.matrix.outputs.matrix }}
+      sha_short: ${{ steps.sha.outputs.sha_short }}
 
     steps:
       - name: Checkout
@@ -36,6 +37,10 @@ jobs:
         with:
           architectures: ${{ env.ARCHITECTURES }}
           image-name: ${{ env.IMAGE_NAME }}
+
+      - name: Get short commit SHA
+        id: sha
+        run: echo "sha_short=${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
 
   build:
     name: Build ${{ matrix.arch }} image
@@ -68,6 +73,7 @@ jobs:
           image: ${{ matrix.image }}
           image-tags: |
             ${{ github.event.release.tag_name || 'latest' }}
+            ${{ needs.init.outputs.sha_short }}
             latest
           push: "true"
           version: ${{ github.event.release.tag_name || '1.0.0' }}
@@ -93,6 +99,7 @@ jobs:
           image-name: ${{ env.IMAGE_NAME }}
           image-tags: |
             ${{ github.event.release.tag_name || 'latest' }}
+            ${{ needs.init.outputs.sha_short }}
             latest
 
   dispatch:
