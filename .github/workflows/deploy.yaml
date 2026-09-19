@@ -62,6 +62,7 @@ jobs:
           arch: ${{ matrix.arch }}
           build-args: |
             BUILD_FROM=ghcr.io/home-assistant/${{ matrix.arch }}-base:latest
+          container-registry-password: ${{ secrets.GITHUB_TOKEN }}
           context: ser2net/
           file: ser2net/Dockerfile
           image: ${{ matrix.image }}
