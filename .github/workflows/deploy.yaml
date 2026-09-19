@@ -63,3 +63,4 @@ jobs:
           token: ${{ secrets.DISPATCH_TOKEN }}
           repository: vinzcoyote/repository-edge
           event-type: update
+          client-payload: '{"addon": "ser2net"}'
