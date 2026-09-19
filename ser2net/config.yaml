@@ -1,6 +1,6 @@
 ---
 name: ser2net server
-version: dev
+version: 1.0.0
 slug: ser2net
 description: >
   Expose serial ports over the network, including TCP and RFC2217 support
