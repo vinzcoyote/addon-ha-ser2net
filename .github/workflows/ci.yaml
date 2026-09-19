@@ -12,10 +12,22 @@ on:
   workflow_dispatch:
 
 jobs:
-  workflows:
+  build:
+    runs-on: ubuntu-latest
+
     permissions:
       contents: read
       packages: write
-      attestations: write
-      id-token: write
-    uses: jhollowe-addons/workflows/.github/workflows/addon-ci.yaml@main
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build
+        uses: home-assistant/builder@master
+        with:
+          args: |
+            --all \
+            --test \
+            --target /data \
+            --docker-hub ghcr.io
