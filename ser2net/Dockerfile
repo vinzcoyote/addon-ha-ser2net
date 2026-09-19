@@ -1,6 +1,4 @@
-ARG BUILD_FROM
-# hadolint ignore=DL3006
-FROM ${BUILD_FROM}
+FROM ghcr.io/home-assistant/base:latest
 
 # install needed packages
 RUN apk add --no-cache \
