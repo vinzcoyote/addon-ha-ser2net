@@ -7,18 +7,44 @@ on:
     types:
       - published
   workflow_run:
-    workflows: ["CI"]
-    branches: [main]
+    workflows:
+      - CI
+    branches:
+      - main
     types:
       - completed
+  workflow_dispatch:
 
 jobs:
-  workflows:
+  deploy:
+    if: >
+      github.event_name == 'release' ||
+      github.event_name == 'workflow_dispatch' ||
+      (
+        github.event_name == 'workflow_run' &&
+        github.event.workflow_run.conclusion == 'success'
+      )
+    runs-on: ubuntu-latest
+
     permissions:
       contents: read
       packages: write
-      attestations: write
-      id-token: write
-    uses: jhollowe-addons/workflows/.github/workflows/addon-deploy.yaml@main
-    secrets:
-      DISPATCH_TOKEN: ${{ secrets.DISPATCH_TOKEN }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build and publish
+        uses: home-assistant/builder@master
+        with:
+          args: |
+            --all \
+            --target /data \
+            --docker-hub ghcr.io
+
+      - name: Dispatch repository update
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.DISPATCH_TOKEN }}
+          repository: vinzcoyote/repository-edge
+          event-type: update
