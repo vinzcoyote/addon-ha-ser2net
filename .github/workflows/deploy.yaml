@@ -24,13 +24,15 @@ jobs:
         github.event_name == 'workflow_run' &&
         github.event.workflow_run.conclusion == 'success'
       )
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.runs-on }}
 
-    strategy:
-      matrix:
-        arch:
-          - aarch64
-          - amd64
+strategy:
+  matrix:
+    include:
+      - arch: aarch64
+        runs-on: ubuntu-24.04-arm
+      - arch: amd64
+        runs-on: ubuntu-24.04
 
     permissions:
       contents: read
